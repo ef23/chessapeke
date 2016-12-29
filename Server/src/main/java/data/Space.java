@@ -4,14 +4,15 @@ package data;
  * Represents a space on the chessboard
  */
 public class Space {
-	private String spaceName;
+	private int spaceName;
 	
 	/**
 	 * Constructs a space 
 	 * @param spaceName
-	 * 			the name of this space, ex. D5, E4
+	 * 			the coordinates of this space, starting at 1
+	 *           ex. 74,11
 	 */
-	public Space (String spaceName){
+	public Space (int spaceName){
 		this.spaceName = spaceName;
 	}
 	
@@ -20,7 +21,7 @@ public class Space {
 	 * @return
 	 * 		the string that represents the space
 	 */
-	public String getSpaceName(){
+	public int getSpaceName(){
 		return spaceName;
 	}
 	
