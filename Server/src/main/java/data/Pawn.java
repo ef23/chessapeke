@@ -16,6 +16,7 @@ public class Pawn extends ChessPiece {
 		//changes position to new position
 		position=newPosition;
 		return null;//Will be changed
+	
 	}
 
 	@Override
