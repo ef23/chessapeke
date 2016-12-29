@@ -34,7 +34,7 @@ test {
 }
 
 // Set the name of your main class here
-mainClassName = "Main"
+mainClassName = "server.Main"
 
 jar {
     manifest {
