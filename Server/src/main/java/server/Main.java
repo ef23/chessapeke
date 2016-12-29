@@ -1,3 +1,4 @@
+package server;
 import static spark.Spark.*;
 import com.google.gson.Gson;
 

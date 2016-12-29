@@ -1,3 +1,4 @@
+package server;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
@@ -15,6 +16,6 @@ public class Server {
     public void run() {
         // Make the server run on port 8080
         port(8080);
-
+        	
         }
 }
