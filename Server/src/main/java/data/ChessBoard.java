@@ -10,7 +10,7 @@ import json.*;
 public class ChessBoard {
 	boolean isWhiteTurn;
 	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
-	Hashtable<ChessPiece, int[]> moves = new Hashtable<ChessPiece, int[]>();
+	Hashtable<Pieces, MoveHolder[]> moves = new Hashtable<Pieces, MoveHolder[]>();
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 
@@ -58,6 +58,12 @@ public class ChessBoard {
 	public String getIfInCheck(){
 		return inCheck;
 	}
+	
+	public enum Pieces {
+		WPAWN, WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING,
+		BPAWN, BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING;
+	}
+	
 	
 	//this should be in the client/server
 //	public void updateBoard (updateBoard update){
