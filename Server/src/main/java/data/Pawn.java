@@ -10,6 +10,7 @@ public class Pawn extends ChessPiece {
 		pieceType="pawn";
 		position=positionIn;
 		color=colorIn;
+		multiple=false;
 		movement=new int[]{10};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();

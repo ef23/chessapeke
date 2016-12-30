@@ -1,19 +1,19 @@
 package data;
 
-import java.util.ArrayList;
-
 import json.updateBoard;
 
-public class Bishop extends ChessPiece {
-	public Bishop(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
-		pieceType="bishop";
+public class Knight extends ChessPiece {
+
+	public Knight(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
+		pieceType="knight";
 		position=positionIn;
 		color=colorIn;
-		multiple=true;
-		movement=new int[]{11};//Movement pattern for bishop
+		multiple=false;
+		movement=new int[]{21,12};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();
 	}
+	
 	@Override
 	public updateBoard move(Space newPosition) {
 		//changes position to new position
@@ -22,7 +22,9 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	public void getMoves(){
-		//To be implemented
+	public void getMoves() {
+		// TODO Auto-generated method stub
+
 	}
+
 }
