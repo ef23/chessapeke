@@ -7,9 +7,11 @@ import json.*;
  * A chess piece on the board
  */
 public abstract class ChessPiece {
+	
 	protected Space position;//Stores position of piece
 	
 	protected String pieceType;//Stores type of piece
+	protected ArrayList<String> validMoves;
 	
 	protected int[] movement;//Different ways piece can move; row=1s pos, col=10s
 	
@@ -18,8 +20,18 @@ public abstract class ChessPiece {
 	
 	protected ChessBoard chessBoard;//Stores reference copy 
 	
+	/**
+	 * Changes position of piece to new position
+	 * @param newPosition
+	 * @return
+	 * 		json encoding of board state
+	 */
 	public abstract updateBoard move(Space newPosition);
-	public abstract ArrayList<Space> getMoves();
+	
+	/**
+	 * Obtain list of valid moves given current board state and position of piece
+	 */
+	public abstract void getMoves();//Populates getMoves based on new board state
 	
 	
 	/**
