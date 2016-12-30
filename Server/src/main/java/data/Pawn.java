@@ -12,7 +12,9 @@ public class Pawn extends ChessPiece {
 		color=colorIn;
 		movement=new int[]{10};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
+		getMoves();
 	}
+	
 	@Override
 	public updateBoard move(Space newPosition) {
 		//changes position to new position
