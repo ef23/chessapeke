@@ -10,6 +10,7 @@ import json.*;
 public class ChessBoard {
 	boolean isWhiteTurn;
 	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
+	Hashtable<ChessPiece, int[]> moves = new Hashtable<ChessPiece, int[]>();
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 

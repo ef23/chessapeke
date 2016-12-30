@@ -4,7 +4,7 @@ package data;
  * Represents a space on the chessboard
  */
 public class Space {
-	private int spaceName;
+	private int space;
 	
 	/**
 	 * Constructs a space 
@@ -13,7 +13,7 @@ public class Space {
 	 *           ex. 74,11
 	 */
 	public Space (int spaceName){
-		this.spaceName = spaceName;
+		this.space = spaceName;
 	}
 	
 	/**
@@ -21,8 +21,8 @@ public class Space {
 	 * @return
 	 * 		the string that represents the space
 	 */
-	public int getSpaceName(){
-		return spaceName;
+	public int getSpace(){
+		return space;
 	}
 	
 	/**
@@ -30,8 +30,23 @@ public class Space {
 	 * @param newSpace
 	 * 		the new space to be set for this instance
 	 */
-	public void setSpaceName(Space newSpace){
-		this.spaceName = newSpace.getSpaceName();
+	public void setSpace(Space newSpace){
+		this.space = newSpace.getSpace();
+	}
+	
+	
+	@Override
+	public boolean equals (Object o){
+		if (o instanceof Space){
+			Space s = (Space) o;
+			return space == s.getSpace();
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		return (space + "").hashCode();
 	}
 	
 }
