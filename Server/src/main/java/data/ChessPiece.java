@@ -46,7 +46,7 @@ public abstract class ChessPiece {
 	}
 
 	/**
-	 * 
+	 * Takes row and column coordinates and converts them into valid rowCol integer if valid index, or -1 if out of bounds
 	 * @param row
 	 * @param col
 	 * @return
@@ -58,7 +58,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * calculates row for given rowCol integer NOT GETTER METHOD
 	 * @param rowCol
 	 * row in ones place, column in tens place
 	 * @return
@@ -70,7 +70,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * calculates column for given rowCol integer NOT GETTER METHOD
 	 * @param rowCol
 	 * row in ones place, column in tens place
 	 * @return
@@ -113,7 +113,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * checks if given rowCol index contains piece with same color as this piece
 	 * @param rowCol
 	 * row in ones, column in tens
 	 * @return
@@ -125,7 +125,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * checks if given rowCol index contains piece with opposite color as this piece
 	 * @param rowCol
 	 * row in ones, column in tens
 	 * @return
@@ -137,7 +137,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * Initializes recursive get moves method, used for pieces that can move more than one unit movement in a given direction
 	 * @param change
 	 * base movement for piece
 	 */
@@ -155,7 +155,8 @@ public abstract class ChessPiece {
 		this.recursiveGetMoves(rowMinus, colMinus, changeRow, changeCol);
 	}
 	/**
-	 * 
+	 * recursive method to check each available index for pieces that can move more than one unit movement in a given direction
+	 * ending conditions: reaches end of board, piece of same color, piece of opposite color
 	 * @param row
 	 * row index we check
 	 * @param col
@@ -182,7 +183,7 @@ public abstract class ChessPiece {
 	}
 	
 	/**
-	 * 
+	 * method to check coordinates for pieces that can only move one unit movement in a given direction
 	 * @param change
 	 * rowCol combination for a single unit of movement for this piece
 	 */
