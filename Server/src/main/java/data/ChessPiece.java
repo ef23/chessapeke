@@ -37,15 +37,51 @@ public abstract class ChessPiece {
 	/**
 	 * Checks if the coordinate is out of bounds
 	 * @param rowCol
-	 * 		the rowCol int
+	 * 		the rowCol int(row in ones place, column in tens place)
 	 * @return
 	 * 		true if out of bounds, false if within
 	 */
-	public static boolean isOutOfBounds(int rowCol)
+	public static boolean isOutOfBounds(int row, int col)
 	{//Checks if row/column combo is out of bounds
-		return (rowCol%10<=8&&rowCol/10<=8&&rowCol%10>=1&&rowCol/10>=1)?false:true;//checks to make sure both are within bounds
+		return (row<9&&row>0&&col<9&&col>0)?false:true;//checks to make sure both are within bounds
 	}
 
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 * integer with row in ones pos, col in tens pos or -1 if out of bounds
+	 */
+	public static int createCoordinates(int row, int col)
+	{
+		return (!isOutOfBounds(row,col))?row+(col*10):-1;
+	}
+	
+	/**
+	 * 
+	 * @param rowCol
+	 * row in ones place, column in tens place
+	 * @return
+	 * row
+	 */
+	public static int getRow(int rowCol)
+	{
+		return rowCol%10;
+	}
+	
+	/**
+	 * 
+	 * @param rowCol
+	 * row in ones place, column in tens place
+	 * @return
+	 * column
+	 */
+	public static int getCol(int rowCol)
+	{
+		return rowCol/10;
+	}
+	
 	/**
 	 * @return the position
 	 */

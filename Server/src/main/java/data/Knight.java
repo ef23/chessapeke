@@ -23,8 +23,13 @@ public class Knight extends ChessPiece {
 
 	@Override
 	public void getMoves() {
-		// TODO Auto-generated method stub
-
+		for(int change:movement)
+		{
+			int rowAdd=(position.getSpace()%10)+(change%10);//Adding to position; row
+			int rowMinus=(position.getSpace()%10)-(change%10);//Subtracting from position; row
+			int colAdd=(position.getSpace()/10)+(change/10);//Adding to position; column
+			int colMinus=(position.getSpace()/10)-(change/10);//Subtracting from position; column
+		}
 	}
 
 }

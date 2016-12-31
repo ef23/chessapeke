@@ -28,23 +28,26 @@ public class Pawn extends ChessPiece {
 		validMoves=new ArrayList<String>();
 		for(int change:movement)
 		{
-			int row=(position.getSpace()%10)+(change%10);
-			int col=(position.getSpace()/10)+(change/10);
-			int newRowCol=row+(col*10);//Row/col we are checking
-			if(chessBoard.getPosition(new Space(newRowCol))==null&&!isOutOfBounds(newRowCol))
+			int row=ChessPiece.getRow(position.getSpace())+ChessPiece.getRow(change);//ones position: row
+			int col=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);//tens position: column
+			int newRowCol=createCoordinates(row,col);//Row/col we are checking
+			//check if there is a piece at (row,col) and if row col is out of bounds
+			if(chessBoard.getPosition(new Space(newRowCol))==null&&newRowCol!=-1)
 				validMoves.add(position.getSpace()+" "+newRowCol);
 		}
 		for(int change:attackMovement)
 		{
-			int row=(position.getSpace()%10)+(change%10);
-			int col1=(position.getSpace()/10)+(change/10);
-			int col2=(position.getSpace()/10)-(change/10);
-			int newRowCol1=row+(col1*10);
-			if(chessBoard.getPosition(new Space(newRowCol1))!=null&&!isOutOfBounds(newRowCol1))
-				validMoves.add(position.getSpace()+" "+newRowCol1);
-			int newRowCol2=row+(col2*10);
-			if(chessBoard.getPosition(new Space(newRowCol2))!=null&&!isOutOfBounds(newRowCol2))
-				validMoves.add(position.getSpace()+" "+newRowCol2);
+			int row=ChessPiece.getRow(position.getSpace())+ChessPiece.getRow(change);
+			int colAdd=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);
+			int colMinus=ChessPiece.getCol(position.getSpace())-ChessPiece.getCol(change);
+			int rowColAdd=createCoordinates(row,colAdd);//If out of bounds, set to -1 for easy detection
+			//check if there is a piece at (row,col) and if row col is out of bounds
+			if(rowColAdd!=-1&&chessBoard.getPosition(new Space(rowColAdd))!=null)
+				validMoves.add(position.getSpace()+" "+rowColAdd);
+			int rowColMinus=createCoordinates(row,colMinus);//If out of bounds, set to -1 for easy detection
+			//check if there is a piece at (row,col) and if row col is out of bounds
+			if(rowColMinus!=-1&&chessBoard.getPosition(new Space(rowColMinus))!=null)
+				validMoves.add(position.getSpace()+" "+rowColMinus);
 		}
 	}
 }
