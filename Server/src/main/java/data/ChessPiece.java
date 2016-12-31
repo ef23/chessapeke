@@ -119,6 +119,18 @@ public abstract class ChessPiece {
 		return chessBoard;
 	}
 	
+	/**
+	 * 
+	 * @param rowCol
+	 * row in ones, column in tens
+	 * @return
+	 * true if space contains the same color,false if it does not
+	 */
+	public boolean spaceContainsColor(int rowCol)
+	{
+		return (chessBoard.getPosition(new Space(rowCol)).isColor()==this.color)?true:false;
+	}
+	
 	@Override
 	public boolean equals(Object o){
 		if (o instanceof ChessPiece){

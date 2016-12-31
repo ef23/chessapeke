@@ -25,10 +25,19 @@ public class Knight extends ChessPiece {
 	public void getMoves() {
 		for(int change:movement)
 		{
-			int rowAdd=(position.getSpace()%10)+(change%10);//Adding to position; row
-			int rowMinus=(position.getSpace()%10)-(change%10);//Subtracting from position; row
-			int colAdd=(position.getSpace()/10)+(change/10);//Adding to position; column
-			int colMinus=(position.getSpace()/10)-(change/10);//Subtracting from position; column
+			int rowAdd=ChessPiece.getRow(position.getSpace())+(ChessPiece.getRow(change));//Adding to position; row
+			int rowMinus=ChessPiece.getRow(position.getSpace())-(ChessPiece.getRow(change));//Subtracting from position; row
+			int colAdd=ChessPiece.getCol(position.getSpace())+(ChessPiece.getCol(change));//Adding to position; column
+			int colMinus=ChessPiece.getCol(position.getSpace())-(ChessPiece.getCol(change));//Subtracting from position; column
+			int[] positions=new int[]{createCoordinates(rowAdd,colAdd),createCoordinates(rowAdd,colMinus),
+					createCoordinates(rowMinus,colAdd),createCoordinates(rowMinus,colMinus)};
+			for(int rowCol:positions)
+			{
+				if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
+				{//If not out of bounds and space does not contain the same color, add to list of valid moves
+					validMoves.add(position.getSpace()+" "+rowCol);
+				}
+			}
 		}
 	}
 
