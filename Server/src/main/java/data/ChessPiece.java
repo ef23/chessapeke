@@ -128,7 +128,45 @@ public abstract class ChessPiece {
 	 */
 	public boolean spaceContainsColor(int rowCol)
 	{
-		return (chessBoard.getPosition(new Space(rowCol)).isColor()==this.color)?true:false;
+		return (chessBoard.getPosition(new Space(rowCol)).isColor()==this.color);
+	}
+	
+	/**
+	 * 
+	 * @param rowCol
+	 * row in ones, column in tens
+	 * @return
+	 * true if space contains opposite color, false if space is empty or contains same color
+	 */
+	public boolean spaceContainsOppositeColor(int rowCol)
+	{
+		return (chessBoard.getPosition(new Space(rowCol))!=null&&chessBoard.getPosition(new Space(rowCol)).isColor()!=this.color);
+	}
+	/**
+	 * 
+	 * @param row
+	 * row index we check
+	 * @param col
+	 * column index we check
+	 * @param changeRow
+	 * amount we add to row to get next row val to check
+	 * @param changeCol
+	 * amount we add to column to get next col val to check
+	 */
+	protected void recursiveGetMoves(int row, int col, int changeRow, int changeCol)
+	{
+		//Base cases
+		if(ChessPiece.isOutOfBounds(row,col)||this.spaceContainsColor(createCoordinates(row,col)))
+			return;//invalid index, finished
+		if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
+		{
+			validMoves.add(position.getSpace()+" "+createCoordinates(row,col));
+			return;//valid index, but final valid index
+		}
+		//otherwise, space is clear and it is legal to move here
+		validMoves.add(position.getSpace()+" "+createCoordinates(row,col));
+		recursiveGetMoves(row+changeRow,col+changeCol,changeRow,changeCol);
+		return;
 	}
 	
 	@Override
