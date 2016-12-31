@@ -142,6 +142,25 @@ public abstract class ChessPiece {
 	{
 		return (chessBoard.getPosition(new Space(rowCol))!=null&&chessBoard.getPosition(new Space(rowCol)).isColor()!=this.color);
 	}
+	
+	/**
+	 * 
+	 * @param change
+	 * base movement for piece
+	 */
+	protected void startRecursiveGetMoves(int change)
+	{
+		int changeRow=ChessPiece.getRow(change);
+		int changeCol=ChessPiece.getCol(changeRow);
+		int rowAdd=ChessPiece.getRow(position.getSpace())+ChessPiece.getRow(change);
+		int colAdd=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);
+		int rowMinus=ChessPiece.getRow(position.getSpace())-ChessPiece.getRow(change);
+		int colMinus=ChessPiece.getCol(position.getSpace())-ChessPiece.getCol(change);
+		this.recursiveGetMoves(rowAdd, colAdd, changeRow, changeCol);
+		this.recursiveGetMoves(rowAdd, colMinus, changeRow, changeCol);
+		this.recursiveGetMoves(rowMinus, colAdd, changeRow, changeCol);
+		this.recursiveGetMoves(rowMinus, colMinus, changeRow, changeCol);
+	}
 	/**
 	 * 
 	 * @param row

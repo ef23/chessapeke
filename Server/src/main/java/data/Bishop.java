@@ -23,6 +23,9 @@ public class Bishop extends ChessPiece {
 
 	@Override
 	public void getMoves(){
-		//To be implemented
+		for(int change:movement)
+		{
+			startRecursiveGetMoves(change);
+		}
 	}
 }

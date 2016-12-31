@@ -23,8 +23,10 @@ public class Rook extends ChessPiece {
 	
 	@Override
 	public void getMoves() {
-		// TODO Auto-generated method stub
-
+		for(int change:movement)
+		{
+			startRecursiveGetMoves(change);
+		}
 	}
 
 }
