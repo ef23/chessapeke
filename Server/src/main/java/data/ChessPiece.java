@@ -15,7 +15,6 @@ public abstract class ChessPiece {
 	
 	protected int[] movement;//Different ways piece can move; row=1s pos, col=10s
 	
-	protected boolean multiple;//Can this piece move more than one predefined movement
 	protected boolean color;//White=true;black=false
 	
 	protected ChessBoard chessBoard;//Stores reference copy 
@@ -101,12 +100,6 @@ public abstract class ChessPiece {
 		return movement;
 	}
 	/**
-	 * @return the multiple
-	 */
-	public boolean isMultiple() {
-		return multiple;
-	}
-	/**
 	 * @return the color
 	 */
 	public boolean isColor() {
@@ -188,6 +181,27 @@ public abstract class ChessPiece {
 		return;
 	}
 	
+	/**
+	 * 
+	 * @param change
+	 * rowCol combination for a single unit of movement for this piece
+	 */
+	protected void nonRecursiveGetMoves(int change)
+	{
+		int rowAdd=ChessPiece.getRow(position.getSpace())+(ChessPiece.getRow(change));//Adding to position; row
+		int rowMinus=ChessPiece.getRow(position.getSpace())-(ChessPiece.getRow(change));//Subtracting from position; row
+		int colAdd=ChessPiece.getCol(position.getSpace())+(ChessPiece.getCol(change));//Adding to position; column
+		int colMinus=ChessPiece.getCol(position.getSpace())-(ChessPiece.getCol(change));//Subtracting from position; column
+		int[] positions=new int[]{createCoordinates(rowAdd,colAdd),createCoordinates(rowAdd,colMinus),
+				createCoordinates(rowMinus,colAdd),createCoordinates(rowMinus,colMinus)};
+		for(int rowCol:positions)
+		{
+			if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
+			{//If not out of bounds and space does not contain the same color, add to list of valid moves
+				validMoves.add(position.getSpace()+" "+rowCol);
+			}
+		}
+	}
 	@Override
 	public boolean equals(Object o){
 		if (o instanceof ChessPiece){

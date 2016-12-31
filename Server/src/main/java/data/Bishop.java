@@ -1,7 +1,5 @@
 package data;
 
-import java.util.ArrayList;
-
 import json.updateBoard;
 
 public class Bishop extends ChessPiece {
@@ -9,7 +7,6 @@ public class Bishop extends ChessPiece {
 		pieceType="bishop";
 		position=positionIn;
 		color=colorIn;
-		multiple=true;
 		movement=new int[]{11};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();

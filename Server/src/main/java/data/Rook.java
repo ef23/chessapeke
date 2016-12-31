@@ -8,7 +8,6 @@ public class Rook extends ChessPiece {
 		pieceType="rook";
 		position=positionIn;
 		color=colorIn;
-		multiple=true;
 		movement=new int[]{10,01};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();

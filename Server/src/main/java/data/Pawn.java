@@ -1,6 +1,6 @@
 package data;
 
-import java.util.*;
+import java.util.ArrayList;
 import json.*;
 
 public class Pawn extends ChessPiece {
@@ -10,7 +10,6 @@ public class Pawn extends ChessPiece {
 		pieceType="pawn";
 		position=positionIn;
 		color=colorIn;
-		multiple=false;
 		movement=new int[]{10};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();
