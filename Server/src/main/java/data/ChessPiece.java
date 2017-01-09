@@ -109,6 +109,13 @@ public abstract class ChessPiece {
 		return pieceType;
 	}
 	/**
+	 * 
+	 * @return list of ValidMoves
+	 */
+	public ArrayList<String> getValidMoves(){
+		return validMoves;
+	}
+	/**
 	 * @return the movement
 	 */
 	public int[] getMovement() {

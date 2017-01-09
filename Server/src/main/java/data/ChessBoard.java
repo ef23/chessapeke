@@ -1,6 +1,8 @@
 package data;
 
 import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.Set;
 
 import json.*;
 
@@ -64,7 +66,35 @@ public class ChessBoard {
 		BPAWN, BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING;
 	}
 	
+	/**
+	 * Goes through pieces and gets valid moves for each
+	 * Assumes that validmoves has been updated for each piece prior to receiving valid moves
+	 * @return 
+	 * 		ArrayList of all possible moves in format (original location)rowcol (endlocation)rowcol
+	 * 		* added depending on whether move is capture
+	 */
+	public ArrayList<String> getMoves()
+	{
+		ArrayList<String> moves=new ArrayList<String>();
+		Set<Space> keys= pieces.keySet();
+		for(Space key:keys)
+		{
+			moves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
+		}
+		return moves;
+	}
 	
+	/**
+	 * goes through all pieces and updates the list of valid moves
+	 * used each time chess board is updated
+	 */
+	public void updateValidMoves(){
+		Set<Space> keys= pieces.keySet();
+		for(Space key:keys)
+		{
+			pieces.get(key).getMoves();
+		}
+	}
 	//this should be in the client/server
 //	public void updateBoard (updateBoard update){
 //		for (PieceUpdate change : update.getUpdate()){
