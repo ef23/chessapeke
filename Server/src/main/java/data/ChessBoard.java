@@ -10,6 +10,7 @@ import json.*;
  * Represents a chessboard
  */
 public class ChessBoard {
+	final int CHESSBOARD_WIDTH = 8;
 	boolean isWhiteTurn;
 	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
 	Hashtable<Pieces, MoveHolder[]> moves = new Hashtable<Pieces, MoveHolder[]>();
@@ -19,6 +20,52 @@ public class ChessBoard {
 	//"no" is there is no check being done
 	String inCheck = "no";
 	ChessPiece[] kings;
+	
+	/**
+	 * Initializes a new chess board
+	 */
+	public ChessBoard (){
+		//initialize pawns
+		boolean isWhite = true;
+		
+		//should only loop twice anyway
+		for (int j = 21; j < 72; j += 50) {
+			for (int i = j; i < j + CHESSBOARD_WIDTH; i++) {
+				Space pos = new Space(i);
+				pieces.put(pos, new Pawn(pos, this, isWhite));
+			}
+			//second iteration will do black pawns
+			isWhite = false;
+		}
+		
+		//initialize the rest of the pieces, black first
+		for (int j = 81; j > 10; j -=70){
+			int startRow = j;
+			int endRow = j - 1 + CHESSBOARD_WIDTH;
+			
+			Space queenpos = new Space(j + 3);
+			pieces.put(queenpos, new Queen(queenpos, this, isWhite));
+			
+			Space kingpos = new Space (j + 4);
+			pieces.put(kingpos, new King(kingpos, this, isWhite));
+			
+			Space rook = new Space(startRow);
+			pieces.put(rook, new Rook(rook, this, isWhite));
+			rook = new Space(endRow);
+			pieces.put(rook, new Rook(rook, this, isWhite));
+			
+			Space knight = new Space(++startRow);
+			pieces.put(knight, new Knight(knight, this, isWhite));
+			knight = new Space(--endRow);
+			pieces.put(knight, new Knight(knight, this, isWhite));
+			
+			Space bishop = new Space(++startRow);
+			pieces.put(bishop, new Bishop(bishop, this, isWhite));
+			bishop = new Space(--endRow);
+			pieces.put(bishop, new Bishop(bishop, this, isWhite));
+		}
+		
+	} 
 	
 	/**
 	 * Queries a space on the chess board
