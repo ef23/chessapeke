@@ -1,6 +1,5 @@
 package data;
 
-import json.updateBoard;
 
 public class Knight extends ChessPiece {
 
@@ -13,12 +12,6 @@ public class Knight extends ChessPiece {
 		getMoves();
 	}
 	
-	@Override
-	public updateBoard move(Space newPosition) {
-		//changes position to new position
-		position=newPosition;
-		return null;//Will be changed
-	}
 
 	@Override
 	public void getMoves() {

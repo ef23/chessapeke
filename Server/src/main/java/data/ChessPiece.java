@@ -25,7 +25,22 @@ public abstract class ChessPiece {
 	 * @return
 	 * 		json encoding of board state
 	 */
-	public abstract updateBoard move(Space newPosition);
+	public updateBoard move(Space newPosition)
+	{
+		//changes position to new position
+		LinkedList<PieceUpdate> updates= new LinkedList<PieceUpdate>();
+		PieceUpdate thisPieceUpdate=new PieceUpdate((this.color)?"white":"black",this.pieceType,this.position,newPosition,false);
+		updates.add(thisPieceUpdate);
+		//check to see if there is a piece in this position
+		if(chessBoard.getPosition(newPosition)!=null)
+		{//We are removing a piece when moving the current piece
+			ChessPiece oldPiece=chessBoard.getPosition(newPosition);
+			PieceUpdate oldPieceUpdate=new PieceUpdate((oldPiece.isColor())?"white":"black",oldPiece.getPieceType(),newPosition,null,true);
+			updates.add(oldPieceUpdate);
+		}
+		position=newPosition;
+		return new updateBoard(updates);
+	}
 	
 	/**
 	 * Obtain list of valid moves given current board state and position of piece
@@ -172,8 +187,8 @@ public abstract class ChessPiece {
 		if(ChessPiece.isOutOfBounds(row,col)||this.spaceContainsColor(createCoordinates(row,col)))
 			return;//invalid index, finished
 		if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
-		{
-			validMoves.add(position.getSpace()+" "+createCoordinates(row,col));
+		{//captures add * at end to mark
+			validMoves.add(position.getSpace()+" "+createCoordinates(row,col)+"*");
 			return;//valid index, but final valid index
 		}
 		//otherwise, space is clear and it is legal to move here
@@ -197,7 +212,11 @@ public abstract class ChessPiece {
 				createCoordinates(rowMinus,colAdd),createCoordinates(rowMinus,colMinus)};
 		for(int rowCol:positions)
 		{
-			if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
+			if(rowCol!=-1&&!this.spaceContainsOppositeColor(rowCol))
+			{//If not out of bounds and space contains opposite color, add to list of valid moves with * to denote capture
+				validMoves.add(position.getSpace()+" "+rowCol+"*");
+			}
+			else if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
 			{//If not out of bounds and space does not contain the same color, add to list of valid moves
 				validMoves.add(position.getSpace()+" "+rowCol);
 			}
