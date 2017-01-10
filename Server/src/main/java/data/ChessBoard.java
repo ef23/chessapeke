@@ -2,6 +2,7 @@ package data;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -72,6 +73,17 @@ public class ChessBoard {
 	} 
 	
 	/**
+	 * copy constructor
+	 * @param chessBoardIn chessboard we are copying from
+	 */
+	public ChessBoard(ChessBoard chessBoardIn)
+	{
+		pieces=new Hashtable<Space, ChessPiece>(chessBoardIn.pieces);
+		validMoves=new ArrayList<String>(chessBoardIn.validMoves);
+		isWhiteTurn=chessBoardIn.isWhiteTurn;
+	}
+	
+	/**
 	 * Queries a space on the chess board
 	 * @param query
 	 * 			the position to query
@@ -99,26 +111,38 @@ public class ChessBoard {
 	 * 			end space
 	 */
 	public void move (Space from, Space to){
-		String player;
-		if (isWhiteTurn)
-			player = "white";
-		else
-			player = "black";
+		if(this.stillInCheck(from, to)==false)
+		{
+			String player;
+			if (isWhiteTurn)
+				player = "white";
+			else
+				player = "black";
+			executeMove(from, to);
+			
+			ChessPieceVisitor v = new ChessPieceVisitor();
+			change.add(new PieceUpdate(player, pieces.get(to).accept(v), from, to, false));
+		}
+	}
+	
+	/**
+	 * directly executes move
+	 * @param from 
+	 * 		starting space
+	 * @param to 
+	 * 		ending space
+	 */
+	protected void executeMove(Space from, Space to)
+	{
 		ChessPiece moved = pieces.get(from);
 		
 		if (pieces.get(to) != null){
 			capture(to);
-			
-			
 		}
 		
 		pieces.put(to, moved);
 		updateValidMoves();
-		
-		ChessPieceVisitor v = new ChessPieceVisitor();
-		change.add(new PieceUpdate(player, pieces.get(to).accept(v), from, to, false));
 	}
-	
 	/**
 	 * Returns if the king is checked or not
 	 * @return
@@ -235,6 +259,75 @@ public class ChessBoard {
 			//TODO throw error
 		}
 		move(new Space(Integer.parseInt(startLoc)), destination);
+	}
+	
+	/**
+	 * Checks to see if given color still in check after move has been executed
+	 * @param from location that we want to move from
+	 * @param to location that we want to move to
+	 * @return 
+	 *   true if still in check once move is executed
+	 * 	false if move removes us from check after being executed
+	 */
+	public boolean stillInCheck(Space from, Space to)
+	{
+		ChessBoard sandbox=new ChessBoard(this);//creates sandbox chessboard to test moves out on
+		Space kingSpace=null;
+		//retrieves space that king of our color lies on
+		for(Entry<Space, ChessPiece> entry:this.pieces.entrySet())
+		{
+			//if the piece type is king, and it is the king that is the color of the one that is currently moving
+			if(entry.getValue().getPieceType().equals("king")&&
+					entry.getValue().isColor()==!sandbox.isWhiteTurn)
+				kingSpace=entry.getKey();
+		}
+		sandbox.executeMove(from, to);//simulates executing our move on the board
+		for(String validMove:sandbox.validMoves)
+		{
+			String color=validMove.split("|")[0].split(" ")[1];
+			int endLocation=Integer.parseInt(validMove.split("|")[1].split(" ")[1]);
+			//if the piece location is the same as the king and the color is the one opposite that is currently moving(since sandbox has executed move this is accurate)
+			if(color.equals((sandbox.isWhiteTurn)?"true":"false")&&
+					endLocation==kingSpace.getSpace())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checks whether opposite color is now in check
+	 */
+	public void changeCheckState()
+	{
+		boolean oppositeColor=(this.isWhiteTurn)?false:true;
+		int kingSpace=0;
+		//retrieve index of current color's king
+		for(Entry<Space, ChessPiece> entry:this.pieces.entrySet())
+		{
+			if(entry.getValue().getPieceType().equals("king")&&
+					entry.getValue().isColor()==this.isWhiteTurn)
+			{
+				kingSpace=entry.getKey().getSpace();
+			}
+		}
+		//search through validMoves to see if king appears as target at all
+		for(String validMove:this.validMoves)
+		{
+			String color=validMove.split("|")[0].split(" ")[1];
+			int endLocation=Integer.parseInt(validMove.split("|")[1].split(" ")[1]);
+			//if this is the location of the king and is the opposite of the one currently moving(since move has already been executed)
+			if(color.equals((oppositeColor)?"true":"false")&&
+					endLocation==kingSpace)
+			{
+				//
+				this.inCheck=(this.isWhiteTurn)?"w":"b";
+				return;
+			}
+		}
+		//if we didn't find that the current color is in check, then nobody is in check (other color could not execute move while in check)
+		this.inCheck="no";
 	}
 	
 	public void updateBoard (UpdateBoard update){
