@@ -13,7 +13,7 @@ public class ChessBoard {
 	final int CHESSBOARD_WIDTH = 8;
 	boolean isWhiteTurn;
 	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
-	Hashtable<Pieces, MoveHolder[]> moves = new Hashtable<Pieces, MoveHolder[]>();
+	ArrayList<String> validMoves;
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 
@@ -64,7 +64,7 @@ public class ChessBoard {
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 		}
-		
+		getValidMoves();
 	} 
 	
 	/**
@@ -116,29 +116,28 @@ public class ChessBoard {
 	/**
 	 * Goes through pieces and gets valid moves for each
 	 * Assumes that validmoves has been updated for each piece prior to receiving valid moves
-	 * @return 
-	 * 		ArrayList of all possible moves in format (original location)rowcol (endlocation)rowcol
-	 * 		* added depending on whether move is capture
+	 * 
 	 */
-	public ArrayList<String> getMoves()
+	public void getValidMoves()
 	{
-		ArrayList<String> moves=new ArrayList<String>();
+		validMoves=new ArrayList<String>();
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
 		{
-			moves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
+			validMoves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
 		}
-		return moves;
+		//checks for castling opportunities
+		
 	}
 	
 	/**
-	 * goes through all pieces and updates the list of valid moves
+	 * goes through all pieces and updates the list of valid moves within individual piece
 	 * used each time chess board is updated
 	 */
 	public void updateValidMoves(){
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
-		{
+		{//get legal moves from within each piece
 			pieces.get(key).getMoves();
 		}
 	}

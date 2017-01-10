@@ -7,6 +7,7 @@ public class Knight extends ChessPiece {
 		pieceType="knight";
 		position=positionIn;
 		color=colorIn;
+		isMoved=false;
 		movement=new int[]{21,12};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();
