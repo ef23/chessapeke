@@ -64,7 +64,7 @@ public class ChessBoard {
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 		}
-		validMoves=getValidMoves();
+		getValidMoves();
 	} 
 	
 	/**
@@ -116,23 +116,22 @@ public class ChessBoard {
 	/**
 	 * Goes through pieces and gets valid moves for each
 	 * Assumes that validmoves has been updated for each piece prior to receiving valid moves
-	 * @return 
-	 * 		ArrayList of all possible moves in format (original location)rowcol (endlocation)rowcol
-	 * 		* added depending on whether move is capture
+	 * 
 	 */
-	public ArrayList<String> getValidMoves()
+	public void getValidMoves()
 	{
-		ArrayList<String> moves=new ArrayList<String>();
+		validMoves=new ArrayList<String>();
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
 		{
-			moves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
+			validMoves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
 		}
-		return moves;
+		//checks for castling opportunities
+		
 	}
 	
 	/**
-	 * goes through all pieces and updates the list of valid moves
+	 * goes through all pieces and updates the list of valid moves within individual piece
 	 * used each time chess board is updated
 	 */
 	public void updateValidMoves(){
@@ -141,7 +140,6 @@ public class ChessBoard {
 		{//get legal moves from within each piece
 			pieces.get(key).getMoves();
 		}
-		//check for castling opportunities
 	}
 	//this should be in the client/server
 //	public void updateBoard (updateBoard update){

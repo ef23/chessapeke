@@ -9,7 +9,7 @@ import json.*;
 public abstract class ChessPiece {
 	
 	protected Space position;//Stores position of piece
-	
+	protected boolean isMoved;//True if piece has been moved, false if not
 	protected String pieceType;//Stores type of piece
 	protected ArrayList<String> validMoves;//Stores string that represents valid moves: format: "pieceType color|startlocation endlocation"
 	
@@ -39,6 +39,7 @@ public abstract class ChessPiece {
 			updates.add(oldPieceUpdate);
 		}
 		position=newPosition;
+		isMoved=true;
 		return new updateBoard(updates);
 	}
 	
@@ -107,6 +108,13 @@ public abstract class ChessPiece {
 	 */
 	public String getPieceType() {
 		return pieceType;
+	}
+	/**
+	 * 
+	 * @return isMoved
+	 */
+	public boolean hasMoved(){
+		return isMoved;
 	}
 	/**
 	 * 

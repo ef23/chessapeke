@@ -6,6 +6,7 @@ public class Bishop extends ChessPiece {
 		pieceType="bishop";
 		position=positionIn;
 		color=colorIn;
+		isMoved=false;
 		movement=new int[]{11};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();
