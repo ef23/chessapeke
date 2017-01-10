@@ -146,6 +146,7 @@ public class ChessBoard {
 			pieces.get(key).getMoves();
 		}
 	}
+	
 	/**
 	 * 
 	 * @return ability to kingside castle
@@ -183,19 +184,38 @@ public class ChessBoard {
 				pieces.get(knightPos)==null&&
 				pieces.get(bishopPos)==null)?true:false;
 	}
-	//this should be in the client/server
-//	public void updateBoard (updateBoard update){
-//		for (PieceUpdate change : update.getUpdate()){
-//			
-//			//if the piece is captured, remove from hashtable
-//			if (change.isKilled()){
-//				pieces.remove(change.getFrom());
-//			} else {
-//				//move the piece
-//				ChessPiece moved = pieces.get(change.getFrom());
-//				pieces.put(change.getTo(), moved);
-//			}
-//		}
-//	}
+	
+	//will probably be changed
+	/**
+	 * Parses a move string with the given piece type and destination
+	 * @param pieceType
+	 *			the type of piece given
+	 * @param destination
+	 * 			the destination
+	 */
+	public Space parseMove(String pieceType, Space destination){
+		boolean isOnlyPiece = true;
+		String startLoc = "";
+		for (String move : validMoves){
+			//if this move is the target type of piece
+			if (move.indexOf(pieceType) != -1){
+				if (move.indexOf(destination.getSpace() + "") != -1){
+					//make sure that only one piece of given type can move to the location
+					if (isOnlyPiece){
+						isOnlyPiece = false;
+					} else {
+						//TODO throw an error
+						return null;
+					}
+					String[] parts = move.split(" ");
+					startLoc = parts[2];
+				}
+			}
+		}
+		if (!startLoc.equals("")){
+			return null;
+		}
+		return new Space(Integer.parseInt(startLoc));
+	}
 	
 }
