@@ -141,7 +141,9 @@ public class ChessBoard {
 		}
 		
 		pieces.put(to, moved);
+		isWhiteTurn=(isWhiteTurn)?false:true;//update whose turn it is
 		updateValidMoves();
+		changeCheckState();
 	}
 	/**
 	 * Returns if the king is checked or not
