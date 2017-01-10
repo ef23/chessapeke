@@ -1,7 +1,11 @@
-package data;
+package data.pieces;
 
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
 
-public class Knight extends ChessPiece {
+public class Knight extends ChessPiece implements PieceVisitor{
 
 	public Knight(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
 		pieceType="knight";
@@ -22,4 +26,8 @@ public class Knight extends ChessPiece {
 		}
 	}
 
+	@Override
+	public void accept(ChessPieceVisitor v){
+		v.visit(this);
+	}
 }

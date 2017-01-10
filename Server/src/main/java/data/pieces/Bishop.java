@@ -1,7 +1,11 @@
-package data;
+package data.pieces;
 
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
 
-public class Bishop extends ChessPiece {
+public class Bishop extends ChessPiece implements PieceVisitor{
 	public Bishop(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
 		pieceType="bishop";
 		position=positionIn;
@@ -19,5 +23,10 @@ public class Bishop extends ChessPiece {
 		{
 			startRecursiveGetMoves(change);
 		}
+	}
+	
+	@Override
+	public void accept(ChessPieceVisitor v){
+		v.visit(this);
 	}
 }

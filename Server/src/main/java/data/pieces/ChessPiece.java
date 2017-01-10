@@ -1,12 +1,17 @@
-package data;
+package data.pieces;
 
 import java.util.*;
+
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
 import json.*;
 
 /**
  * A chess piece on the board
  */
-public abstract class ChessPiece {
+public abstract class ChessPiece implements PieceVisitor{
 	
 	protected Space position;//Stores position of piece
 	protected boolean isMoved;//True if piece has been moved, false if not
@@ -25,7 +30,7 @@ public abstract class ChessPiece {
 	 * @return
 	 * 		json encoding of board state
 	 */
-	public updateBoard move(Space newPosition)
+	public UpdateBoard move(Space newPosition)
 	{
 		//changes position to new position
 		LinkedList<PieceUpdate> updates= new LinkedList<PieceUpdate>();
@@ -40,7 +45,7 @@ public abstract class ChessPiece {
 		}
 		position=newPosition;
 		isMoved=true;
-		return new updateBoard(updates);
+		return new UpdateBoard(updates);
 	}
 	
 	/**

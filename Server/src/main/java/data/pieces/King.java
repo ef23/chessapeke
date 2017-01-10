@@ -1,7 +1,11 @@
-package data;
+package data.pieces;
 
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
 
-public class King extends ChessPiece {
+public class King extends ChessPiece implements PieceVisitor{
 	
 	public King(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
 		pieceType="king";
@@ -20,5 +24,9 @@ public class King extends ChessPiece {
 			nonRecursiveGetMoves(change);
 		}
 	}
-
+	
+	@Override
+	public void accept(ChessPieceVisitor v){
+		v.visit(this);
+	}
 }

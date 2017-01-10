@@ -2,13 +2,13 @@ package json;
 
 import java.util.LinkedList;
 
-public class updateBoard {
+public class UpdateBoard {
 	LinkedList<PieceUpdate> update;
 
 	/**
 	 * @param update
 	 */
-	public updateBoard(LinkedList<PieceUpdate> update) {
+	public UpdateBoard(LinkedList<PieceUpdate> update) {
 		super();
 		this.update = update;
 	}

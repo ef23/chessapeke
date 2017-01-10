@@ -1,9 +1,11 @@
 package data;
 
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Set;
 
+import data.pieces.*;
 import json.*;
 
 /**
@@ -20,6 +22,8 @@ public class ChessBoard {
 	//"no" is there is no check being done
 	String inCheck = "no";
 	ChessPiece[] kings;
+	
+	LinkedList<PieceUpdate> change = new LinkedList<PieceUpdate>();
 	
 	/**
 	 * Initializes a new chess board
@@ -95,8 +99,24 @@ public class ChessBoard {
 	 * 			end space
 	 */
 	public void move (Space from, Space to){
+		String player;
+		if (isWhiteTurn)
+			player = "white";
+		else
+			player = "black";
 		ChessPiece moved = pieces.get(from);
+		
+		if (pieces.get(to) != null){
+			capture(to);
+			
+			
+		}
+		
 		pieces.put(to, moved);
+		updateValidMoves();
+		
+		ChessPieceVisitor v = new ChessPieceVisitor();
+		change.add(new PieceUpdate(player, pieces.get(to).accept(v), from, to, false));
 	}
 	
 	/**
@@ -150,10 +170,10 @@ public class ChessBoard {
 	 * @param destination
 	 * 			the destination
 	 */
-	public Space parseMove(String pieceType, Space destination){
+	public void parseMove(String pieceType, Space destination){
 		boolean isOnlyPiece = true;
 		String startLoc = "";
-		for (String move : getMoves()){
+		for (String move : validMoves){
 			//if this move is the target type of piece
 			if (move.indexOf(pieceType) != -1){
 				if (move.indexOf(destination.getSpace() + "") != -1){
@@ -162,7 +182,6 @@ public class ChessBoard {
 						isOnlyPiece = false;
 					} else {
 						//TODO throw an error
-						return null;
 					}
 					String[] parts = move.split(" ");
 					startLoc = parts[2];
@@ -170,24 +189,28 @@ public class ChessBoard {
 			}
 		}
 		if (!startLoc.equals("")){
-			return null;
+			//TODO throw error
 		}
-		return new Space(Integer.parseInt(startLoc));
+		move(new Space(Integer.parseInt(startLoc)), destination);
 	}
 	
-	//this should be in the client/server
-//	public void updateBoard (updateBoard update){
-//		for (PieceUpdate change : update.getUpdate()){
-//			
-//			//if the piece is captured, remove from hashtable
-//			if (change.isKilled()){
-//				pieces.remove(change.getFrom());
-//			} else {
-//				//move the piece
-//				ChessPiece moved = pieces.get(change.getFrom());
-//				pieces.put(change.getTo(), moved);
-//			}
-//		}
-//	}
+	public void updateBoard (UpdateBoard update){
+		
+		for (PieceUpdate change : update.getUpdate()){
+			//if the piece is captured, remove from hashtable
+			if (change.isKilled()){
+				pieces.remove(change.getFrom());
+			} else {
+				//move the piece
+				ChessPiece moved = pieces.get(change.getFrom());
+				pieces.put(change.getTo(), moved);
+			}
+		}
+		
+		//set up for next turn
+		if (isWhiteTurn)
+			isWhiteTurn = false;
+		change = new LinkedList<PieceUpdate>();
+	}
 	
 }

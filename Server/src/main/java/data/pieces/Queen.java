@@ -1,6 +1,11 @@
-package data;
+package data.pieces;
 
-public class Queen extends ChessPiece {
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
+
+public class Queen extends ChessPiece implements PieceVisitor{
 
 	public Queen(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
 		pieceType="queen";
@@ -21,4 +26,8 @@ public class Queen extends ChessPiece {
 		}
 	}
 
+	@Override
+	public void accept(ChessPieceVisitor v){
+		v.visit(this);
+	}
 }

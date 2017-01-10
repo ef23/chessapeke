@@ -1,8 +1,13 @@
-package data;
+package data.pieces;
 
 import java.util.ArrayList;
 
-public class Pawn extends ChessPiece {
+import data.ChessBoard;
+import data.ChessPieceVisitor;
+import data.PieceVisitor;
+import data.Space;
+
+public class Pawn extends ChessPiece implements PieceVisitor{
 
 	private int[] attackMovement=new int[]{11};//attack pattern for pawns
 	public Pawn(Space positionIn, ChessBoard chessBoardIn, boolean colorIn){
@@ -43,5 +48,10 @@ public class Pawn extends ChessPiece {
 					!this.spaceContainsColor(rowColAdd))
 				validMoves.add(position.getSpace()+" "+rowColMinus+"*");//Add * to indicate capture
 		}
+	}
+	
+	@Override
+	public void accept(ChessPieceVisitor v){
+		v.visit(this);
 	}
 }
