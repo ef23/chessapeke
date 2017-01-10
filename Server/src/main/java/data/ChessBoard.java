@@ -127,7 +127,12 @@ public class ChessBoard {
 			validMoves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
 		}
 		//checks for castling opportunities
-		
+		if(canKingSideCastle())
+			validMoves.add(isWhiteTurn+"|KC");
+		if(canQueenSideCastle())
+		{
+			validMoves.add(isWhiteTurn+"|QC");
+		}
 	}
 	
 	/**
@@ -140,6 +145,43 @@ public class ChessBoard {
 		{//get legal moves from within each piece
 			pieces.get(key).getMoves();
 		}
+	}
+	/**
+	 * 
+	 * @return ability to kingside castle
+	 */
+	private boolean canKingSideCastle()
+	{
+		Space kingPos=(isWhiteTurn)?new Space(51):new Space(58);
+		Space rookPos=(isWhiteTurn)?new Space(81):new Space(88);
+		Space bishopPos=(isWhiteTurn)?new Space(61):new Space(68);
+		Space knightPos=(isWhiteTurn)?new Space(71):new Space(78);
+		return(pieces.get(kingPos).getPieceType().equals("king")&&
+				pieces.get(kingPos).hasMoved()==false&&
+				pieces.get(rookPos).getPieceType().equals("rook")&&
+				pieces.get(rookPos).hasMoved()==false&&
+				pieces.get(knightPos)==null&&
+				pieces.get(bishopPos)==null)?true:false;
+	}
+	/**
+	 * 
+	 * @return ability to queenside castle
+	 */
+	private boolean canQueenSideCastle()
+	{
+		Space kingPos=(isWhiteTurn)?new Space(51):new Space(58);
+		Space queenPos=(isWhiteTurn)?new Space(41):new Space(48);
+		Space rookPos=(isWhiteTurn)?new Space(11):new Space(18);
+		Space bishopPos=(isWhiteTurn)?new Space(31):new Space(38);
+		Space knightPos=(isWhiteTurn)?new Space(21):new Space(28);
+		return(pieces.get(kingPos).getPieceType().equals("king")&&
+				pieces.get(kingPos).hasMoved()==false&&
+				pieces.get(queenPos).getPieceType().equals("queen")&&
+				pieces.get(queenPos).hasMoved()==false&&
+				pieces.get(rookPos).getPieceType().equals("rook")&&
+				pieces.get(rookPos).hasMoved()==false&&
+				pieces.get(knightPos)==null&&
+				pieces.get(bishopPos)==null)?true:false;
 	}
 	//this should be in the client/server
 //	public void updateBoard (updateBoard update){
