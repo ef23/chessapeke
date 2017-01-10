@@ -13,7 +13,7 @@ public class Bishop extends ChessPiece implements PieceVisitor{
 		isMoved=false;
 		movement=new int[]{11};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
-		getMoves();
+//		getMoves();
 	}
 	
 
@@ -26,7 +26,7 @@ public class Bishop extends ChessPiece implements PieceVisitor{
 	}
 	
 	@Override
-	public void accept(ChessPieceVisitor v){
-		v.visit(this);
+	public String accept(ChessPieceVisitor v){
+		return v.visit(this);
 	}
 }

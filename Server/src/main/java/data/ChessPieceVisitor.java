@@ -1,11 +1,6 @@
 package data;
 
-import data.pieces.Bishop;
-import data.pieces.King;
-import data.pieces.Knight;
-import data.pieces.Pawn;
-import data.pieces.Queen;
-import data.pieces.Rook;
+import data.pieces.*;
 
 /**
  * Visitor pattern
@@ -28,5 +23,8 @@ public class ChessPieceVisitor {
 	}
 	public String visit(Pawn e){
 		return "pawn";
+	}
+	public String visit(ChessPiece e){
+		return visit(e);
 	}
 }

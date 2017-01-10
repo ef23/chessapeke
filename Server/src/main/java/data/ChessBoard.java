@@ -69,7 +69,7 @@ public class ChessBoard {
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 		}
-		getValidMoves();
+//		getValidMoves();
 	} 
 	
 	/**
@@ -113,15 +113,15 @@ public class ChessBoard {
 	public void move (Space from, Space to){
 		if(this.stillInCheck(from, to)==false)
 		{
-			String player;
-			if (isWhiteTurn)
-				player = "white";
-			else
-				player = "black";
-			executeMove(from, to);
+			String player = (isWhiteTurn)?"white":"black";
+			ChessPiece captured = null;
 			
-			ChessPieceVisitor v = new ChessPieceVisitor();
-			change.add(new PieceUpdate(player, pieces.get(to).accept(v), from, to, false));
+			//if a piece was captured, add it to the list of changes
+			if ((captured = executeMove(from, to))!=null){
+				change.add(new PieceUpdate(player, captured.accept(new ChessPieceVisitor()), from, to, true));
+			}
+			
+			change.add(new PieceUpdate(player, pieces.get(to).accept(new ChessPieceVisitor()), from, to, false));
 		}
 	}
 	
@@ -131,12 +131,16 @@ public class ChessBoard {
 	 * 		starting space
 	 * @param to 
 	 * 		ending space
+	 * @return
+	 * 		the piece, if any, that was captured. null if none
 	 */
-	protected void executeMove(Space from, Space to)
-	{
+	protected ChessPiece executeMove(Space from, Space to)
+		{
+		ChessPiece captured = null;
 		ChessPiece moved = pieces.get(from);
 		
-		if (pieces.get(to) != null){
+		//if it is moving to a piece that is currently occupied
+		if ((captured = pieces.get(to)) != null){
 			capture(to);
 		}
 		
@@ -144,6 +148,8 @@ public class ChessBoard {
 		isWhiteTurn=(isWhiteTurn)?false:true;//update whose turn it is
 		updateValidMoves();
 		changeCheckState();
+		
+		return captured;
 	}
 	/**
 	 * Returns if the king is checked or not
@@ -152,11 +158,6 @@ public class ChessBoard {
 	 */
 	public String getIfInCheck(){
 		return inCheck;
-	}
-	
-	public enum Pieces {
-		WPAWN, WROOK, WKNIGHT, WBISHOP, WQUEEN, WKING,
-		BPAWN, BROOK, BKNIGHT, BBISHOP, BQUEEN, BKING;
 	}
 	
 	/**
@@ -332,6 +333,11 @@ public class ChessBoard {
 		this.inCheck="no";
 	}
 	
+	/**
+	 * Parses a JSON containing the updates to the board
+	 * @param update
+	 * 		the json object 
+	 */
 	public void updateBoard (UpdateBoard update){
 		
 		for (PieceUpdate change : update.getUpdate()){
@@ -339,9 +345,7 @@ public class ChessBoard {
 			if (change.isKilled()){
 				pieces.remove(change.getFrom());
 			} else {
-				//move the piece
-				ChessPiece moved = pieces.get(change.getFrom());
-				pieces.put(change.getTo(), moved);
+				executeMove(change.getFrom(), change.getTo());
 			}
 		}
 		
@@ -350,4 +354,50 @@ public class ChessBoard {
 			isWhiteTurn = false;
 		change = new LinkedList<PieceUpdate>();
 	}
+	
+	/**
+	 * temp ascii representation
+	 */
+	public void displayBoard(){
+		char[][] board = new char[8][8];
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[0].length; j++){
+				board[i][j] = '-';
+			}
+		}
+		
+		for (Space space : pieces.keySet()){
+			int col = space.getSpace()/10 - 1;
+			int row = space.getSpace()%10 - 1;
+			ChessPieceVisitor v = new ChessPieceVisitor();
+			switch(pieces.get(space).accept(v)){
+			case "pawn":
+				board[col][row] = 'P';
+				break;
+			case "rook":
+				board[col][row] = 'R';
+				break;
+			case "knight":
+				board[col][row] = 'N';
+				break;
+			case "bishop":
+				board[col][row] = 'B';
+				break;
+			case "king":
+				board[col][row] = 'K';
+				break;
+			case "queen":
+				board[col][row] = 'Q';
+				break;
+			}
+		}
+		
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[0].length; j++){
+				System.out.print(board[i][j]);
+			}
+			System.out.println("");
+		}
+	}
+	
 }
