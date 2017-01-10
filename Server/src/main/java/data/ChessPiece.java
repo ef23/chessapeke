@@ -11,7 +11,7 @@ public abstract class ChessPiece {
 	protected Space position;//Stores position of piece
 	
 	protected String pieceType;//Stores type of piece
-	protected ArrayList<String> validMoves;
+	protected ArrayList<String> validMoves;//Stores string that represents valid moves: format: "pieceType color|startlocation endlocation"
 	
 	protected int[] movement;//Different ways piece can move; row=1s pos, col=10s
 	
@@ -195,11 +195,11 @@ public abstract class ChessPiece {
 			return;//invalid index, finished
 		if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
 		{//captures add * at end to mark
-			validMoves.add(position.getSpace()+" "+createCoordinates(row,col)+"*");
+			validMoves.add(this.getPieceType()+" "+this.isColor()+"|"+position.getSpace()+" "+createCoordinates(row,col)+"*");
 			return;//valid index, but final valid index
 		}
 		//otherwise, space is clear and it is legal to move here
-		validMoves.add(position.getSpace()+" "+createCoordinates(row,col));
+		validMoves.add(this.getPieceType()+" "+this.isColor()+"|"+position.getSpace()+" "+createCoordinates(row,col));
 		recursiveGetMoves(row+changeRow,col+changeCol,changeRow,changeCol);
 		return;
 	}
@@ -221,11 +221,11 @@ public abstract class ChessPiece {
 		{
 			if(rowCol!=-1&&!this.spaceContainsOppositeColor(rowCol))
 			{//If not out of bounds and space contains opposite color, add to list of valid moves with * to denote capture
-				validMoves.add(position.getSpace()+" "+rowCol+"*");
+				validMoves.add(this.getPieceType()+" "+this.isColor()+"|"+position.getSpace()+" "+rowCol+"*");
 			}
 			else if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
 			{//If not out of bounds and space does not contain the same color, add to list of valid moves
-				validMoves.add(position.getSpace()+" "+rowCol);
+				validMoves.add(this.getPieceType()+" "+this.isColor()+"|"+position.getSpace()+" "+rowCol);
 			}
 		}
 	}

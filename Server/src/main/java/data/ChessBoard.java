@@ -13,7 +13,7 @@ public class ChessBoard {
 	final int CHESSBOARD_WIDTH = 8;
 	boolean isWhiteTurn;
 	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
-	Hashtable<Pieces, MoveHolder[]> moves = new Hashtable<Pieces, MoveHolder[]>();
+	ArrayList<String> validMoves;
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 
@@ -64,7 +64,7 @@ public class ChessBoard {
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 		}
-		
+		validMoves=getValidMoves();
 	} 
 	
 	/**
@@ -120,7 +120,7 @@ public class ChessBoard {
 	 * 		ArrayList of all possible moves in format (original location)rowcol (endlocation)rowcol
 	 * 		* added depending on whether move is capture
 	 */
-	public ArrayList<String> getMoves()
+	public ArrayList<String> getValidMoves()
 	{
 		ArrayList<String> moves=new ArrayList<String>();
 		Set<Space> keys= pieces.keySet();
@@ -138,9 +138,10 @@ public class ChessBoard {
 	public void updateValidMoves(){
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
-		{
+		{//get legal moves from within each piece
 			pieces.get(key).getMoves();
 		}
+		//check for castling opportunities
 	}
 	//this should be in the client/server
 //	public void updateBoard (updateBoard update){
