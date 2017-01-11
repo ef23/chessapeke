@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import data.pieces.*;
+import data.MoveInterpreter;
 import json.*;
 
 /**
@@ -275,56 +276,39 @@ public class ChessBoard {
 	public boolean stillInCheck(Space from, Space to)
 	{
 		ChessBoard sandbox=new ChessBoard(this);//creates sandbox chessboard to test moves out on
-		Space kingSpace=null;
-		//retrieves space that king of our color lies on
-		for(Entry<Space, ChessPiece> entry:this.pieces.entrySet())
-		{
-			//if the piece type is king, and it is the king that is the color of the one that is currently moving
-			if(entry.getValue().getPieceType().equals("king")&&
-					entry.getValue().isColor()==!sandbox.isWhiteTurn)
-				kingSpace=entry.getKey();
-		}
-		sandbox.executeMove(from, to);//simulates executing our move on the board
+		int kingSpace=this.findPieceLocation("king", sandbox.isWhiteTurn);//stores location of king that is currently in check(column in tens, row in ones)
+		sandbox.executeMove(from, to);//executes move on sandbox
 		for(String validMove:sandbox.validMoves)
 		{
-			String color=validMove.split("|")[0].split(" ")[1];
-			int endLocation=Integer.parseInt(validMove.split("|")[1].split(" ")[1]);
-			//if the piece location is the same as the king and the color is the one opposite that is currently moving(since sandbox has executed move this is accurate)
-			if(color.equals((sandbox.isWhiteTurn)?"true":"false")&&
-					endLocation==kingSpace.getSpace())
+			String color=MoveInterpreter.findColor(validMove);//Color of piece that is moving
+			int endLocation=MoveInterpreter.findEndLocation(validMove);
+			//if location piece is attacking is king's location, and piece is of opposite color to king (sandbox.isWhiteTurn now represents opposite color since move has been executed)
+			if(color.equals((sandbox.isWhiteTurn)?"white":"black")&&
+					endLocation==kingSpace)
 			{
 				return true;
 			}
 		}
-		return false;
+		return false;//If we never came upon piece attacking king's location, safe to assume this color is no longer in check after move
 	}
 	
 	/**
-	 * checks whether opposite color is now in check
+	 * checks whether current color is in check after last move was executed
 	 */
 	public void changeCheckState()
 	{
 		boolean oppositeColor=(this.isWhiteTurn)?false:true;
-		int kingSpace=0;
-		//retrieve index of current color's king
-		for(Entry<Space, ChessPiece> entry:this.pieces.entrySet())
-		{
-			if(entry.getValue().getPieceType().equals("king")&&
-					entry.getValue().isColor()==this.isWhiteTurn)
-			{
-				kingSpace=entry.getKey().getSpace();
-			}
-		}
-		//search through validMoves to see if king appears as target at all
+		int kingSpace=this.findPieceLocation("king",this.isWhiteTurn);//Location of king that we want to see if is now in check
+		//search through validMoves to see if king appears as target
 		for(String validMove:this.validMoves)
 		{
 			String color=validMove.split("|")[0].split(" ")[1];
 			int endLocation=Integer.parseInt(validMove.split("|")[1].split(" ")[1]);
-			//if this is the location of the king and is the opposite of the one currently moving(since move has already been executed)
-			if(color.equals((oppositeColor)?"true":"false")&&
+			//if endlocation of move matches the king of the color we are checking, and attacking piece color is the opposite of king's
+			if(color.equals((this.isWhiteTurn)?"black":"white")&&
 					endLocation==kingSpace)
 			{
-				//
+				//change check state accordingly, current color is now in check
 				this.inCheck=(this.isWhiteTurn)?"w":"b";
 				return;
 			}
@@ -355,6 +339,27 @@ public class ChessBoard {
 		change = new LinkedList<PieceUpdate>();
 	}
 	
+	/**
+	 * 
+	 * @param type
+	 * 		type of chess piece ie king, rook, etc
+	 * @param color
+	 * 		color of piece
+	 * @return
+	 * 		location of first piece to fit parameters with column in tens position, row in ones position, or -1 if could not find
+	 */
+	public int findPieceLocation(String type, boolean color)
+	{
+		//iterate through hashtable via locations
+		for(Entry<Space, ChessPiece> entry:this.pieces.entrySet())
+		{
+			//if piece type is same as given, and color is same as given
+			if(entry.getValue().getPieceType().equals(type)&&
+					entry.getValue().isColor()==color)
+				return entry.getKey().getSpace();
+		}
+		return -1;
+	}
 	/**
 	 * temp ascii representation
 	 */
