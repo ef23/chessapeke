@@ -111,14 +111,14 @@ public class ChessBoard {
 	 * @param to
 	 * 			end space
 	 */
-	public void move (Space from, Space to){
-		if(this.stillInCheck(from, to)==false)
+	public void move (Space from, Space to,Space passantLoc){
+		if(this.stillInCheck(from, to,passantLoc)==false)
 		{
 			String player = (isWhiteTurn)?"white":"black";
 			ChessPiece captured = null;
 			
 			//if a piece was captured, add it to the list of changes
-			if ((captured = executeMove(from, to))!=null){
+			if ((captured = executeMove(from, to,passantLoc))!=null){
 				change.add(new PieceUpdate(player, captured.accept(new ChessPieceVisitor()), from, to, true));
 			}
 			
@@ -135,13 +135,19 @@ public class ChessBoard {
 	 * @return
 	 * 		the piece, if any, that was captured. null if none
 	 */
-	protected ChessPiece executeMove(Space from, Space to)
+	protected ChessPiece executeMove(Space from, Space to,Space passantLoc)
 		{
 		ChessPiece captured = null;
 		ChessPiece moved = pieces.get(from);
 		
+		//if move is en passant
+		if(passantLoc!=null)
+		{
+			captured=pieces.get(passantLoc);
+			capture(passantLoc);
+		}
 		//if it is moving to a piece that is currently occupied
-		if ((captured = pieces.get(to)) != null){
+		else if ((captured = pieces.get(to)) != null){
 			capture(to);
 		}
 		
@@ -244,6 +250,7 @@ public class ChessBoard {
 	public void parseMove(String pieceType, Space destination){
 		boolean isOnlyPiece = true;
 		String startLoc = "";
+		int passantLoc=-1;
 		for (String move : validMoves){
 			//if this move is the target type of piece
 			if (move.indexOf(pieceType) != -1){
@@ -256,13 +263,17 @@ public class ChessBoard {
 					}
 					String[] parts = move.split(" ");
 					startLoc = parts[2];
+					if(move.split("*")[1]!=null)
+					{//If there is a location after *, this move represents en passant, store location for capture
+						passantLoc=Integer.parseInt(move.split("*")[1]);
+					}
 				}
 			}
 		}
 		if (!startLoc.equals("")){
 			//TODO throw error
 		}
-		move(new Space(Integer.parseInt(startLoc)), destination);
+		move(new Space(Integer.parseInt(startLoc)), destination,(passantLoc==-1)?null:new Space(passantLoc));
 	}
 	
 	/**
@@ -273,11 +284,11 @@ public class ChessBoard {
 	 *   true if still in check once move is executed
 	 * 	false if move removes us from check after being executed
 	 */
-	public boolean stillInCheck(Space from, Space to)
+	public boolean stillInCheck(Space from, Space to, Space passantLoc)
 	{
 		ChessBoard sandbox=new ChessBoard(this);//creates sandbox chessboard to test moves out on
 		int kingSpace=this.findPieceLocation("king", sandbox.isWhiteTurn);//stores location of king that is currently in check(column in tens, row in ones)
-		sandbox.executeMove(from, to);//executes move on sandbox
+		sandbox.executeMove(from, to, passantLoc);//executes move on sandbox
 		for(String validMove:sandbox.validMoves)
 		{
 			String color=MoveInterpreter.findColor(validMove);//Color of piece that is moving
@@ -329,7 +340,7 @@ public class ChessBoard {
 			if (change.isKilled()){
 				pieces.remove(change.getFrom());
 			} else {
-				executeMove(change.getFrom(), change.getTo());
+				executeMove(change.getFrom(), change.getTo(),null);
 			}
 		}
 		
