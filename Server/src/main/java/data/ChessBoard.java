@@ -112,7 +112,7 @@ public class ChessBoard {
 	 * 			end space
 	 */
 	public void move (Space from, Space to,Space passantLoc){
-		if(this.stillInCheck(from, to,passantLoc)==false)
+		if(!this.inCheck.equals("no") && this.stillInCheck(from, to,passantLoc)==false)
 		{
 			String player = (isWhiteTurn)?"white":"black";
 			ChessPiece captured = null;
@@ -150,7 +150,7 @@ public class ChessBoard {
 		else if ((captured = pieces.get(to)) != null){
 			capture(to);
 		}
-		
+		System.out.println(to + " " + moved);
 		pieces.put(to, moved);
 		isWhiteTurn=(isWhiteTurn)?false:true;//update whose turn it is
 		updateValidMoves();
@@ -274,9 +274,10 @@ public class ChessBoard {
 					}
 					String[] parts = move.split(" ");
 					startLoc = parts[2];
-					if(move.split("*")[1]!=null)
-					{//If there is a location after *, this move represents en passant, store location for capture
-						passantLoc=Integer.parseInt(move.split("*")[1]);
+					
+					//If there is a location after *, this move represents en passant, store location for capture
+					if (move.indexOf("*") != -1) {
+						passantLoc = Integer.parseInt(parts[parts.length - 2]);
 					}
 				}
 			}
