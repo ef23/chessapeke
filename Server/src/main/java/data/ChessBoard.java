@@ -182,10 +182,10 @@ public class ChessBoard {
 		}
 		//checks for castling opportunities
 		if(canKingSideCastle())
-			validMoves.add(isWhiteTurn+"|KC");
+			validMoves.add(isWhiteTurn+" KC");
 		if(canQueenSideCastle())
 		{
-			validMoves.add(isWhiteTurn+"|QC");
+			validMoves.add(isWhiteTurn+" QC");
 		}
 	}
 	
