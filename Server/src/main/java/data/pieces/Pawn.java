@@ -17,7 +17,7 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		color=colorIn;
 		movement=new int[]{10};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
-//		getMoves();
+		getMoves();
 	}
 
 	@Override

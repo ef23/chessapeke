@@ -16,7 +16,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	protected Space position;//Stores position of piece
 	protected boolean isMoved;//True if piece has been moved, false if not
 	protected String pieceType;//Stores type of piece
-	protected ArrayList<String> validMoves;//Stores string that represents valid moves: format: "pieceType color|startlocation endlocation"
+	protected ArrayList<String> validMoves = new ArrayList<String>();//Stores string that represents valid moves: format: "pieceType color|startlocation endlocation"
 	
 	protected int[] movement;//Different ways piece can move; row=1s pos, col=10s
 	
@@ -156,7 +156,10 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public boolean spaceContainsColor(int rowCol)
 	{
-		return (chessBoard.getPosition(new Space(rowCol)).isColor()==this.color);
+		if (chessBoard.getPosition(new Space(rowCol)) == null)
+			return false;
+		else
+			return (chessBoard.getPosition(new Space(rowCol)).isColor()==this.color);
 	}
 	
 	/**

@@ -70,7 +70,7 @@ public class ChessBoard {
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 		}
-//		getValidMoves();
+		getValidMoves();
 	} 
 	
 	/**
@@ -211,6 +211,10 @@ public class ChessBoard {
 		Space rookPos=(isWhiteTurn)?new Space(81):new Space(88);
 		Space bishopPos=(isWhiteTurn)?new Space(61):new Space(68);
 		Space knightPos=(isWhiteTurn)?new Space(71):new Space(78);
+		
+		//if either of these positions are null, then it has moved
+		if (pieces.get(kingPos) == null || pieces.get(rookPos) == null)
+			return false;	
 		return(pieces.get(kingPos).getPieceType().equals("king")&&
 				pieces.get(kingPos).hasMoved()==false&&
 				pieces.get(rookPos).getPieceType().equals("rook")&&
@@ -229,6 +233,13 @@ public class ChessBoard {
 		Space rookPos=(isWhiteTurn)?new Space(11):new Space(18);
 		Space bishopPos=(isWhiteTurn)?new Space(31):new Space(38);
 		Space knightPos=(isWhiteTurn)?new Space(21):new Space(28);
+		
+		//if any of these positions are null, then it has moved
+		if (pieces.get(kingPos) == null 
+				|| pieces.get(rookPos) == null 
+				|| pieces.get(queenPos) == null)
+			return false;
+
 		return(pieces.get(kingPos).getPieceType().equals("king")&&
 				pieces.get(kingPos).hasMoved()==false&&
 				pieces.get(queenPos).getPieceType().equals("queen")&&
