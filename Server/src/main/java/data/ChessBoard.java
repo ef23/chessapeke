@@ -112,7 +112,7 @@ public class ChessBoard {
 	 * 			end space
 	 */
 	public void move (Space from, Space to,Space passantLoc){
-		if(!this.inCheck.equals("no") && this.stillInCheck(from, to,passantLoc)==false)
+		if(this.inCheck.equals("no") || this.stillInCheck(from, to,passantLoc)==false)
 		{
 			String player = (isWhiteTurn)?"white":"black";
 			ChessPiece captured = null;
@@ -150,11 +150,12 @@ public class ChessBoard {
 		else if ((captured = pieces.get(to)) != null){
 			capture(to);
 		}
-		System.out.println(to + " " + moved);
+		pieces.remove(from);
 		pieces.put(to, moved);
 		isWhiteTurn=(isWhiteTurn)?false:true;//update whose turn it is
-		updateValidMoves();
-		changeCheckState();
+		//TODO fix these
+//		updateValidMoves();
+//		changeCheckState();
 		
 		return captured;
 	}
@@ -265,7 +266,9 @@ public class ChessBoard {
 		for (String move : validMoves){
 			//if this move is the target type of piece
 			if (move.indexOf(pieceType) != -1){
+				System.out.println(move + " " + " " + destination.getSpace() + move.indexOf(destination.getSpace() + ""));
 				if (move.indexOf(destination.getSpace() + "") != -1){
+					System.out.println("hi");
 					//make sure that only one piece of given type can move to the location
 					if (isOnlyPiece){
 						isOnlyPiece = false;
@@ -282,9 +285,11 @@ public class ChessBoard {
 				}
 			}
 		}
-		if (!startLoc.equals("")){
+		if (startLoc.equals("")){
+			System.out.println("invalid move u fucking idiot");
 			//TODO throw error
 		}
+		System.out.println(startLoc);
 		move(new Space(Integer.parseInt(startLoc)), destination,(passantLoc==-1)?null:new Space(passantLoc));
 	}
 	
