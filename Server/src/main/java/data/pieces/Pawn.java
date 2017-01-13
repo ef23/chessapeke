@@ -66,6 +66,16 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		{
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+ChessPiece.createCoordinates((this.color)?row+1:row-1, colAdd)+"*"+rowColMinus);//validMove string for en passant has location of piece we are taking after *
 		}
+		//implementation for first move double space movement
+		int col=ChessPiece.getCol(position.getSpace());
+		int rowAdd=ChessPiece.getRow(position.getSpace())+((this.isColor())?2:-2);
+		int rowAddCol=ChessPiece.createCoordinates(rowAdd, col);
+		if(this.hasMoved()==false&&
+				rowAddCol!=-1&&
+				chessBoard.getPosition(new Space(rowAddCol))==null)
+		{
+			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+rowAddCol);
+		}
 	}
 	
 	@Override
