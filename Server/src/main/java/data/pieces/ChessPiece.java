@@ -87,7 +87,8 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public static int getRow(int rowCol)
 	{
-		return rowCol%10;
+		//TODO this needs to be fixed
+		return (rowCol==10)?(1):(rowCol%10);
 	}
 	
 	/**
@@ -207,7 +208,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	protected void recursiveGetMoves(int row, int col, int changeRow, int changeCol)
 	{
 		//Base cases
-		if(ChessPiece.isOutOfBounds(row,col)||this.spaceContainsColor(createCoordinates(row,col)))
+		if(ChessPiece.isOutOfBounds(row,col) || this.spaceContainsColor(createCoordinates(row,col)))
 			return;//invalid index, finished
 		if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
 		{//captures add * at end to mark

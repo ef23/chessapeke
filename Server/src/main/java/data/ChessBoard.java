@@ -196,8 +196,10 @@ public class ChessBoard {
 	 */
 	public void updateValidMoves(){
 		Set<Space> keys= pieces.keySet();
+		ChessPieceVisitor v = new ChessPieceVisitor();
 		for(Space key:keys)
 		{//get legal moves from within each piece
+			System.out.println(key.getSpace() + " " + pieces.get(key).accept(v));
 			pieces.get(key).getMoves();
 		}
 	}
@@ -268,7 +270,6 @@ public class ChessBoard {
 			if (move.indexOf(pieceType) != -1){
 				System.out.println(move + " " + " " + destination.getSpace() + move.indexOf(destination.getSpace() + ""));
 				if (move.indexOf(destination.getSpace() + "") != -1){
-					System.out.println("hi");
 					//make sure that only one piece of given type can move to the location
 					if (isOnlyPiece){
 						isOnlyPiece = false;
@@ -330,8 +331,8 @@ public class ChessBoard {
 		//search through validMoves to see if king appears as target
 		for(String validMove:this.validMoves)
 		{
-			String color=validMove.split("|")[0].split(" ")[1];
-			int endLocation=Integer.parseInt(validMove.split("|")[1].split(" ")[1]);
+			String color=validMove.split(" ")[1];
+			int endLocation= Integer.parseInt(validMove.split(" ")[3]);
 			//if endlocation of move matches the king of the color we are checking, and attacking piece color is the opposite of king's
 			if(color.equals((this.isWhiteTurn)?"black":"white")&&
 					endLocation==kingSpace)
