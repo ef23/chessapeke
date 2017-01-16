@@ -15,7 +15,7 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		position=positionIn;
 		isMoved=false;
 		color=colorIn;
-		movement=new int[]{10};//Movement pattern for pawn
+		movement=new int[]{1};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
 		getMoves();
 	}
@@ -56,12 +56,14 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		int rowColMinus=ChessPiece.createCoordinates(row, colMinus);
 		if(rowColAdd!=-1&&
 				chessBoard.getPosition(new Space(rowColAdd))!=null&&
+				chessBoard.getPosition(new Space(rowColAdd)).spaceContainsOppositeColor(this.position.getSpace())&&
 				chessBoard.getPosition(new Space(rowColAdd)).getPieceType().equals("pawn"))
 		{
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+ChessPiece.createCoordinates((this.color)?row+1:row-1, colAdd)+"*"+rowColAdd);//validMove string for en passant has location of piece we are taking after *
 		}
 		if(rowColMinus!=-1&&
 				chessBoard.getPosition(new Space(rowColMinus))!=null&&
+				chessBoard.getPosition(new Space(rowColAdd)).spaceContainsOppositeColor(this.position.getSpace())&&
 				chessBoard.getPosition(new Space(rowColMinus)).getPieceType().equals("pawn"))
 		{
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+ChessPiece.createCoordinates((this.color)?row+1:row-1, colAdd)+"*"+rowColMinus);//validMove string for en passant has location of piece we are taking after *

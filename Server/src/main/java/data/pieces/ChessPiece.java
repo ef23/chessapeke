@@ -87,8 +87,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public static int getRow(int rowCol)
 	{
-		//TODO this needs to be fixed
-		return (rowCol==10)?(1):(rowCol%10);
+		return rowCol%10;
 	}
 	
 	/**

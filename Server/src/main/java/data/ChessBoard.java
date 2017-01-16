@@ -179,6 +179,12 @@ public class ChessBoard {
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
 		{
+			System.out.println(pieces.get(key).getPieceType()+" @ "+key.getSpace());
+			for(String move:pieces.get(key).getValidMoves())
+			{
+				System.out.println("     "+move);
+			}
+			System.out.println("----------");
 			validMoves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
 		}
 		//checks for castling opportunities
@@ -199,7 +205,7 @@ public class ChessBoard {
 		ChessPieceVisitor v = new ChessPieceVisitor();
 		for(Space key:keys)
 		{//get legal moves from within each piece
-			System.out.println(key.getSpace() + " " + pieces.get(key).accept(v));
+			//System.out.println(key.getSpace() + " " + pieces.get(key).accept(v));
 			pieces.get(key).getMoves();
 		}
 	}
@@ -268,7 +274,7 @@ public class ChessBoard {
 		for (String move : validMoves){
 			//if this move is the target type of piece
 			if (move.indexOf(pieceType) != -1){
-				System.out.println(move + " " + " " + destination.getSpace() + move.indexOf(destination.getSpace() + ""));
+				//System.out.println(move + " " + " " + destination.getSpace() + move.indexOf(destination.getSpace() + ""));
 				if (move.indexOf(destination.getSpace() + "") != -1){
 					//make sure that only one piece of given type can move to the location
 					if (isOnlyPiece){
