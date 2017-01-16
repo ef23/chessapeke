@@ -188,9 +188,9 @@ public abstract class ChessPiece implements PieceVisitor{
 		int rowMinus=ChessPiece.getRow(position.getSpace())-ChessPiece.getRow(change);
 		int colMinus=ChessPiece.getCol(position.getSpace())-ChessPiece.getCol(change);
 		this.recursiveGetMoves(rowAdd, colAdd, changeRow, changeCol);
-		this.recursiveGetMoves(rowAdd, colMinus, changeRow, changeCol);
-		this.recursiveGetMoves(rowMinus, colAdd, changeRow, changeCol);
-		this.recursiveGetMoves(rowMinus, colMinus, changeRow, changeCol);
+		this.recursiveGetMoves(rowAdd, colMinus, -changeRow, changeCol);
+		this.recursiveGetMoves(rowMinus, colAdd, changeRow, -changeCol);
+		this.recursiveGetMoves(rowMinus, colMinus, -changeRow, -changeCol);
 	}
 	/**
 	 * recursive method to check each available index for pieces that can move more than one unit movement in a given direction
