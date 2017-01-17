@@ -12,9 +12,8 @@ public class Rook extends ChessPiece implements PieceVisitor{
 		position=positionIn;
 		color=colorIn;
 		isMoved=false;
-		movement=new int[]{10,01};//Movement pattern for rook
+		movement=new int[]{10,1};//Movement pattern for rook
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
-		getMoves();
 	}
 	
 	@Override

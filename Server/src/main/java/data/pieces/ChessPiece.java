@@ -48,6 +48,10 @@ public abstract class ChessPiece implements PieceVisitor{
 		return new UpdateBoard(updates);
 	}
 	
+	public void setBoard(ChessBoard chessBoardIn)
+	{
+		chessBoard=chessBoardIn;
+	}
 	/**
 	 * Obtain list of valid moves given current board state and position of piece
 	 */
@@ -75,7 +79,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public static int createCoordinates(int row, int col)
 	{
-		return (!isOutOfBounds(row,col))?row+(col*10):-1;
+		return (!isOutOfBounds(row,col))?col+(row*10):-1;
 	}
 	
 	/**
@@ -87,19 +91,19 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public static int getRow(int rowCol)
 	{
-		return rowCol%10;
+		return rowCol/10;
 	}
 	
 	/**
 	 * calculates column for given rowCol integer NOT GETTER METHOD
 	 * @param rowCol
-	 * row in ones place, column in tens place
+	 * row in tens place, column in ones place
 	 * @return
 	 * column
 	 */
 	public static int getCol(int rowCol)
 	{
-		return rowCol/10;
+		return rowCol%10;
 	}
 	
 	/**
@@ -171,7 +175,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	public boolean spaceContainsOppositeColor(int rowCol)
 	{
-		return (chessBoard.getPosition(new Space(rowCol))!=null&&chessBoard.getPosition(new Space(rowCol)).isColor()!=this.color);
+		return (chessBoard.getPosition(new Space(rowCol))!=null)&&(chessBoard.getPosition(new Space(rowCol)).isColor()!=this.color);
 	}
 	
 	/**
@@ -182,7 +186,7 @@ public abstract class ChessPiece implements PieceVisitor{
 	protected void startRecursiveGetMoves(int change)
 	{
 		int changeRow=ChessPiece.getRow(change);
-		int changeCol=ChessPiece.getCol(changeRow);
+		int changeCol=ChessPiece.getCol(change);
 		int rowAdd=ChessPiece.getRow(position.getSpace())+ChessPiece.getRow(change);
 		int colAdd=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);
 		int rowMinus=ChessPiece.getRow(position.getSpace())-ChessPiece.getRow(change);
@@ -206,18 +210,27 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	protected void recursiveGetMoves(int row, int col, int changeRow, int changeCol)
 	{
+		System.out.println(this.getPieceType()+" @ "+this.getPosition().getSpace());
+		System.out.println("Checking "+ChessPiece.createCoordinates(row, col));
 		//Base cases
 		if(ChessPiece.isOutOfBounds(row,col) || this.spaceContainsColor(createCoordinates(row,col)))
+		{	
+			System.out.println("Entered");
 			return;//invalid index, finished
-		if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
+		}
+		else if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
 		{//captures add * at end to mark
+			System.out.println(this.isColor()+" vs "+chessBoard.getPosition(new Space(createCoordinates(row,col))).isColor());
+			System.out.println("Contained opposite color");
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+createCoordinates(row,col)+" *");
 			return;//valid index, but final valid index
 		}
-		//otherwise, space is clear and it is legal to move here
-		validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+createCoordinates(row,col));
-		recursiveGetMoves(row+changeRow,col+changeCol,changeRow,changeCol);
-		return;
+		else if(this.chessBoard.getPosition(new Space(createCoordinates(row,col)))==null)
+		{//otherwise, space is clear and it is legal to move here
+			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+createCoordinates(row,col));
+			recursiveGetMoves(row+changeRow,col+changeCol,changeRow,changeCol);
+			return;
+		}
 	}
 	
 	/**

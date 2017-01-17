@@ -15,9 +15,8 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		position=positionIn;
 		isMoved=false;
 		color=colorIn;
-		movement=new int[]{1};//Movement pattern for pawn
+		movement=new int[]{10};//Movement pattern for pawn
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
-		getMoves();
 	}
 
 	@Override
@@ -25,12 +24,14 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		validMoves=new ArrayList<String>();
 		for(int change:movement)
 		{
-			int row=ChessPiece.getRow(position.getSpace())+ChessPiece.getRow(change);//ones position: row
-			int col=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);//tens position: column
+			int row=ChessPiece.getRow(position.getSpace())+((this.isColor())?ChessPiece.getRow(change):-ChessPiece.getRow(change));//tens position: row
+			int col=ChessPiece.getCol(position.getSpace())+ChessPiece.getCol(change);//ones position: column
 			int newRowCol=ChessPiece.createCoordinates(row,col);//Row/col we are checking
 			//check if there is a piece at (row,col) and if row col is out of bounds
 			if(chessBoard.getPosition(new Space(newRowCol))==null&&newRowCol!=-1)
+			{
 				validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+newRowCol);
+			}
 		}
 		for(int change:attackMovement)
 		{
@@ -63,7 +64,7 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 		}
 		if(rowColMinus!=-1&&
 				chessBoard.getPosition(new Space(rowColMinus))!=null&&
-				chessBoard.getPosition(new Space(rowColAdd)).spaceContainsOppositeColor(this.position.getSpace())&&
+				chessBoard.getPosition(new Space(rowColMinus)).spaceContainsOppositeColor(this.position.getSpace())&&
 				chessBoard.getPosition(new Space(rowColMinus)).getPieceType().equals("pawn"))
 		{
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+ChessPiece.createCoordinates((this.color)?row+1:row-1, colAdd)+"*"+rowColMinus);//validMove string for en passant has location of piece we are taking after *

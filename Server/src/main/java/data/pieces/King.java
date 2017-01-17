@@ -14,7 +14,6 @@ public class King extends ChessPiece implements PieceVisitor{
 		color=colorIn;
 		movement=new int[]{10,01,11};//Movement pattern for bishop
 		this.chessBoard=chessBoardIn;//Reference copy of chess board
-		getMoves();
 	}
 
 	@Override

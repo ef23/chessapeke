@@ -69,7 +69,10 @@ public class ChessBoard {
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
 			bishop = new Space(--endRow);
 			pieces.put(bishop, new Bishop(bishop, this, isWhite));
+			
+			isWhite=true;
 		}
+		updateValidMoves();
 		getValidMoves();
 	} 
 	
@@ -123,6 +126,7 @@ public class ChessBoard {
 			}
 			
 			change.add(new PieceUpdate(player, pieces.get(to).accept(new ChessPieceVisitor()), from, to, false));
+			this.updatePieces();
 		}
 	}
 	
@@ -153,9 +157,9 @@ public class ChessBoard {
 		pieces.remove(from);
 		pieces.put(to, moved);
 		isWhiteTurn=(isWhiteTurn)?false:true;//update whose turn it is
-		//TODO fix these
-//		updateValidMoves();
-//		changeCheckState();
+		updateValidMoves();
+		getValidMoves();
+		changeCheckState();
 		
 		return captured;
 	}
@@ -179,12 +183,6 @@ public class ChessBoard {
 		Set<Space> keys= pieces.keySet();
 		for(Space key:keys)
 		{
-			System.out.println(pieces.get(key).getPieceType()+" @ "+key.getSpace());
-			for(String move:pieces.get(key).getValidMoves())
-			{
-				System.out.println("     "+move);
-			}
-			System.out.println("----------");
 			validMoves.addAll(pieces.get(key).getValidMoves());//Adds all valid moves to moves array
 		}
 		//checks for castling opportunities
@@ -440,4 +438,14 @@ public class ChessBoard {
 		}
 	}
 	
+	/**
+	 * goes through pieces and updates chess board to this one
+	 */
+	public void updatePieces()
+	{
+		for(Space key:pieces.keySet())
+		{
+			this.getPosition(key).setBoard(this);
+		}
+	}
 }
