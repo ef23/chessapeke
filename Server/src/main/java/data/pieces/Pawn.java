@@ -42,12 +42,16 @@ public class Pawn extends ChessPiece implements PieceVisitor{
 			//check if there is a piece at (row,col) and if row col is out of bounds
 			if(rowColAdd!=-1&&chessBoard.getPosition(new Space(rowColAdd))!=null&&
 					!this.spaceContainsColor(rowColAdd))
+			{
 				validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+rowColAdd+"*");//Add * to indicate capture
+			}
 			int rowColMinus=ChessPiece.createCoordinates(row,colMinus);//If out of bounds, set to -1 for easy detection
 			//check if there is a piece at (row,col) and if row col is out of bounds
 			if(rowColMinus!=-1&&chessBoard.getPosition(new Space(rowColMinus))!=null&&
-					!this.spaceContainsColor(rowColAdd))
+					this.spaceContainsOppositeColor(rowColAdd))
+			{
 				validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+rowColMinus+"*");//Add * to indicate capture
+			}
 		}
 		//implementation for en passant
 		int row=ChessPiece.getRow(position.getSpace());

@@ -210,18 +210,13 @@ public abstract class ChessPiece implements PieceVisitor{
 	 */
 	protected void recursiveGetMoves(int row, int col, int changeRow, int changeCol)
 	{
-		System.out.println(this.getPieceType()+" @ "+this.getPosition().getSpace());
-		System.out.println("Checking "+ChessPiece.createCoordinates(row, col));
 		//Base cases
 		if(ChessPiece.isOutOfBounds(row,col) || this.spaceContainsColor(createCoordinates(row,col)))
 		{	
-			System.out.println("Entered");
 			return;//invalid index, finished
 		}
 		else if(this.spaceContainsOppositeColor(createCoordinates(row,col)))
 		{//captures add * at end to mark
-			System.out.println(this.isColor()+" vs "+chessBoard.getPosition(new Space(createCoordinates(row,col))).isColor());
-			System.out.println("Contained opposite color");
 			validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+createCoordinates(row,col)+" *");
 			return;//valid index, but final valid index
 		}
@@ -248,11 +243,11 @@ public abstract class ChessPiece implements PieceVisitor{
 				createCoordinates(rowMinus,colAdd),createCoordinates(rowMinus,colMinus)};
 		for(int rowCol:positions)
 		{
-			if(rowCol!=-1&&!this.spaceContainsOppositeColor(rowCol))
+			if(rowCol!=-1&&this.spaceContainsOppositeColor(rowCol))
 			{//If not out of bounds and space contains opposite color, add to list of valid moves with * to denote capture
 				validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+rowCol+" *");
 			}
-			else if(rowCol!=-1&&!this.spaceContainsColor(rowCol))
+			else if(rowCol!=-1&&this.spaceContainsColor(rowCol)==false)
 			{//If not out of bounds and space does not contain the same color, add to list of valid moves
 				validMoves.add(this.getPieceType()+" "+this.isColor()+" "+position.getSpace()+" "+rowCol);
 			}
