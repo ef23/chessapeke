@@ -397,16 +397,26 @@ public class ChessBoard {
 	 * temp ascii representation
 	 */
 	public void displayBoard(){
-		char[][] board = new char[8][8];
-		for (int i = 0; i < board.length; i++){
-			for (int j = 0; j < board[0].length; j++){
+		char[][] board = new char[10][10];
+		char start = 'a';
+		for (int i = 1; i < board.length-1; i++){
+			board[i][0] =  (char) ('9' - (char) i);
+		}
+		
+		for (int i = 1; i < board[9].length-1; i++){
+			board[9][i] = start;
+			start++;
+		}
+		
+		for (int i = 1; i < board.length-1; i++){
+			for (int j = 1; j < board[0].length-1; j++){
 				board[i][j] = '-';
 			}
 		}
 		
 		for (Space space : pieces.keySet()){
-			int col = space.getSpace()/10 - 1;
-			int row = space.getSpace()%10 - 1;
+			int col = space.getSpace()/10;
+			int row = space.getSpace()%10;
 			ChessPieceVisitor v = new ChessPieceVisitor();
 			switch(pieces.get(space).accept(v)){
 			case "pawn":
@@ -430,7 +440,7 @@ public class ChessBoard {
 			}
 		}
 		
-		for (int i = 0; i < board.length; i++){
+		for (int i = 1; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				System.out.print(board[i][j]);
 			}
