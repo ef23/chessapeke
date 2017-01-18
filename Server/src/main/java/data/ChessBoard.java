@@ -257,6 +257,18 @@ public class ChessBoard {
 				pieces.get(bishopPos)==null)?true:false;
 	}
 	
+	//TODO remove after testing, takes in input in format "knight d5" 
+	public void doMove(String toParse){
+		String[] move = toParse.split(" ");
+		String piece = move[0];
+		String space = move[1];
+		//97 = a, 98 = b, etc.
+		char firstSpaceCoord = space.charAt(0);
+		int coordinate = space.charAt(1);
+		Space destination = new Space(Math.abs(96 - firstSpaceCoord)*10 + coordinate);
+		parseMove(piece, destination);
+	}
+	
 	//will probably be changed
 	/**
 	 * Parses a move string with the given piece type and destination
