@@ -9,13 +9,20 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		test.displayBoard();
 		while(true){
-			if (test.isWhiteTurn())
-				System.out.println("\nWhite's turn.");
-			else
-				System.out.println("\nBlack's turn");
-			String input = s.nextLine();
-			test.doMove(input);
-			test.displayBoard();
+//			for (String move : test.validMoves){
+//				System.out.println(move);
+//			}
+			try {
+				if (test.isWhiteTurn())
+					System.out.println("\nWhite's turn.");
+				else
+					System.out.println("\nBlack's turn");
+				String input = s.nextLine();
+				test.doMove(input);
+				test.displayBoard();
+			} catch (Exception e) {
+				continue;
+			}
 		}
 	}
 }

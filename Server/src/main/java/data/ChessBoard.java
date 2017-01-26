@@ -17,7 +17,7 @@ public class ChessBoard {
 	private final int CHESSBOARD_WIDTH = 8;
 	private boolean isWhiteTurn = true;
 	private Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
-	private ArrayList<String> validMoves;
+	public ArrayList<String> validMoves;
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 
@@ -117,6 +117,7 @@ public class ChessBoard {
 	public void move (Space from, Space to,Space passantLoc){
 		if(this.inCheck.equals("no") || this.stillInCheck(from, to,passantLoc)==false)
 		{
+			System.out.println("entered");
 			String player = (isWhiteTurn)?"white":"black";
 			ChessPiece captured = null;
 			
@@ -263,10 +264,10 @@ public class ChessBoard {
 		String piece = move[0];
 		String space = move[1];
 		//97 = a, 98 = b, etc.
-		char firstSpaceCoord = space.charAt(0);
-		int coordinate = space.charAt(1);
-		Space destination = new Space(Math.abs(96 - firstSpaceCoord)*10 + coordinate);
-		parseMove(piece, destination);
+		int firstSpaceCoord = space.charAt(0);
+		int coordinate = Character.getNumericValue(space.charAt(1));
+		Space destination = new Space(coordinate*10 + Math.abs(96 - firstSpaceCoord));
+		parseMove(piece, destination, isWhiteTurn);
 	}
 	
 	//will probably be changed
@@ -277,13 +278,14 @@ public class ChessBoard {
 	 * @param destination
 	 * 			the destination
 	 */
-	public void parseMove(String pieceType, Space destination){
+	public void parseMove(String pieceType, Space destination, boolean isWhite){
+		String isWhiteString = (isWhite) ? "true":"false";
 		boolean isOnlyPiece = true;
 		String startLoc = "";
 		int passantLoc=-1;
 		for (String move : validMoves){
 			//if this move is the target type of piece
-			if (move.indexOf(pieceType) != -1){
+			if (move.indexOf(pieceType) != -1 && move.indexOf(isWhiteString) != -1){
 				//System.out.println(move + " " + " " + destination.getSpace() + move.indexOf(destination.getSpace() + ""));
 				if (move.indexOf(destination.getSpace() + "") != -1){
 					//make sure that only one piece of given type can move to the location
@@ -306,7 +308,6 @@ public class ChessBoard {
 			System.out.println("invalid move u fucking idiot");
 			//TODO throw error
 		}
-		System.out.println(startLoc);
 		move(new Space(Integer.parseInt(startLoc)), destination,(passantLoc==-1)?null:new Space(passantLoc));
 	}
 	
@@ -438,7 +439,7 @@ public class ChessBoard {
 		}
 		
 		for (Space space : pieces.keySet()){
-			int col = space.getSpace()/10;
+			int col = 9 - space.getSpace()/10;
 			int row = space.getSpace()%10;
 			ChessPieceVisitor v = new ChessPieceVisitor();
 			switch(pieces.get(space).accept(v)){
