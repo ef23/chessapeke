@@ -14,10 +14,10 @@ import json.*;
  * Represents a chessboard
  */
 public class ChessBoard {
-	final int CHESSBOARD_WIDTH = 8;
-	boolean isWhiteTurn;
-	Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
-	ArrayList<String> validMoves;
+	private final int CHESSBOARD_WIDTH = 8;
+	private boolean isWhiteTurn = true;
+	private Hashtable<Space, ChessPiece> pieces = new Hashtable<Space, ChessPiece>();
+	private ArrayList<String> validMoves;
 	
 	//"w" is white king is being checked, 
 	//"b" is black king is being checked, 
@@ -405,6 +405,17 @@ public class ChessBoard {
 		}
 		return -1;
 	}
+	
+	/**
+	 * The current turn
+	 * 
+	 * @return
+	 * 		True if it is white's turn, false if it is black's
+	 */
+	public boolean isWhiteTurn(){
+		return isWhiteTurn;
+	}
+	
 	/**
 	 * temp ascii representation
 	 */
